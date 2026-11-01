@@ -1,9 +1,8 @@
-
 import { useMemo, useState } from "react";
 import { Link, useParams } from "react-router";
 
 import { dsaTopics } from "../data/dsa";
-import  { legacyProblems }  from "../data/legacyProblems";
+import { problems } from "../data/problems";
 
 import ProblemFilters from "../components/problems/ProblemFilters";
 import ProblemList from "../components/problems/ProblemList";
@@ -20,10 +19,7 @@ function PatternPage() {
 
   const { completedProblems } = useProgress();
 
-  const topic = dsaTopics.find(
-    (item) => item.id === topicId
-  );
-
+  const topic = dsaTopics.find((item) => item.id === topicId);
   const pattern = topic?.patterns.find(
     (item) => item.id === patternId
   );
@@ -42,8 +38,9 @@ function PatternPage() {
     const searchTerm = search.trim().toLowerCase();
 
     return patternProblems.filter((problem) => {
-      const matchesSearch =
-        problem.title.toLowerCase().includes(searchTerm);
+      const matchesSearch = problem.title
+        .toLowerCase()
+        .includes(searchTerm);
 
       const matchesDifficulty =
         difficulty === "All" ||
@@ -53,8 +50,8 @@ function PatternPage() {
     });
   }, [patternProblems, search, difficulty]);
 
-  const solvedCount = patternProblems.filter(
-    (problem) => completedProblems.includes(problem.id)
+  const solvedCount = patternProblems.filter((problem) =>
+    completedProblems.includes(problem.id)
   ).length;
 
   if (!topic || !pattern) {
@@ -63,10 +60,7 @@ function PatternPage() {
 
   return (
     <section className="content-page">
-      <Link
-        to={`/dsa/${topicId}`}
-        className="back-link"
-      >
+      <Link to={`/dsa/${topicId}`} className="back-link">
         ← Back to {topic.title}
       </Link>
 

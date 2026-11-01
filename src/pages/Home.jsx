@@ -1,4 +1,3 @@
-
 import Hero from "../components/Hero";
 import TopicGrid from "../components/TopicGrid";
 
@@ -12,3 +11,5 @@ function Home() {
 }
 
 export default Home;
+
+

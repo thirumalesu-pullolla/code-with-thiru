@@ -1,16 +1,13 @@
-
 import { Link, useParams } from "react-router";
 
 import { dsaTopics } from "../data/dsa";
-import  { legacyProblems }  from "../data/legacyProblems";
+import { problems } from "../data/problems";
 import NotFound from "./NotFound";
 
 function DsaTopicPage() {
   const { topicId } = useParams();
 
-  const topic = dsaTopics.find(
-    (item) => item.id === topicId
-  );
+  const topic = dsaTopics.find((item) => item.id === topicId);
 
   if (!topic) {
     return <NotFound />;
@@ -23,13 +20,11 @@ function DsaTopicPage() {
       </Link>
 
       <h1>{topic.title}</h1>
-      <p className="page-description">
-        {topic.description}
-      </p>
+      <p className="page-description">{topic.description}</p>
 
       <div className="pattern-list">
         {topic.patterns.map((pattern) => {
-          const count = legacyProblems.filter(
+          const count = problems.filter(
             (problem) =>
               problem.topicId === topicId &&
               problem.patternId === pattern.id
@@ -38,7 +33,6 @@ function DsaTopicPage() {
           return (
             <article className="pattern-card" key={pattern.id}>
               <h2>{pattern.title}</h2>
-
               <p>{count} coding questions</p>
 
               <Link

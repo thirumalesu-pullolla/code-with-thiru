@@ -1,4 +1,3 @@
-
 import { useMemo } from "react";
 import { useSearchParams } from "react-router";
 
@@ -125,25 +124,29 @@ function ProblemsExplorerPage() {
 
   return (
     <section className="content-page explorer-page">
-      <h1>Explore Coding Problems</h1>
+      <div className="explorer-heading-row">
+        <h1>Explore Coding Problems</h1>
+
+        <ProgressBar
+          completed={completedCount}
+          total={problems.length}
+        />
+      </div>
 
       <p className="page-description">
         Browse pattern-wise DSA problems, filter by
         difficulty, and track your learning progress.
       </p>
 
-      <ProgressBar
-        completed={completedCount}
-        total={problems.length}
-      />
-
-      <ExplorerFilters
-        filters={filters}
-        topics={dsaTopics}
-        patterns={availablePatterns}
-        onFilterChange={updateFilter}
-        onReset={resetFilters}
-      />
+      <div className="explorer-toolbar">
+        <ExplorerFilters
+          filters={filters}
+          topics={dsaTopics}
+          patterns={availablePatterns}
+          onFilterChange={updateFilter}
+          onReset={resetFilters}
+        />
+      </div>
 
       <div className="explorer-results-heading">
         <h2>{totalResults} Problems Found</h2>

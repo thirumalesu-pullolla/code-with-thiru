@@ -1,16 +1,26 @@
-
 import { Link } from "react-router";
 
 import { dsaTopics } from "../data/dsa";
-import { legacyProblems }   from "../data/legacyProblems";
+import { problems } from "../data/problems";
 import { useProgress } from "../context/ProgressContext";
 import ProgressBar from "../components/problems/ProgressBar";
+
+const allPatterns = dsaTopics
+  .flatMap((topic) =>
+    topic.patterns.map((pattern) => ({
+      ...pattern,
+      topicId: topic.id,
+      topicTitle: topic.title,
+      number: Number(pattern.title.match(/^Pattern (\d+):/)?.[1] ?? 0)
+    }))
+  )
+  .sort((a, b) => a.number - b.number);
 
 function DsaPage() {
   const { isCompleted } = useProgress();
 
-  const completedCount = problems.filter(
-    (problem) => isCompleted(problem.id)
+  const completedCount = problems.filter((problem) =>
+    isCompleted(problem.id)
   ).length;
 
   return (
@@ -18,39 +28,46 @@ function DsaPage() {
       <h1>DSA Patterns</h1>
 
       <p className="page-description">
-        Learn Data Structures and Algorithms
-        through structured pattern-wise practice.
+        Learn Data Structures and Algorithms through structured
+        pattern-wise practice.
       </p>
 
-      <ProgressBar
-        completed={completedCount}
-        total={problems.length}
-      />
+      <div className="dsa-progress-compact">
+        <ProgressBar
+          completed={completedCount}
+          total={problems.length}
+        />
+      </div>
 
-      <div className="topics-grid">
-        {dsaTopics.map((topic) => {
-          const topicProblems = problems.filter(
-            (problem) => problem.topicId === topic.id
+      <div className="dsa-pattern-grid">
+        {allPatterns.map((pattern) => {
+          const patternProblems = problems.filter(
+            (problem) =>
+              problem.topicId === pattern.topicId &&
+              problem.patternId === pattern.id
           );
 
-          const solved = topicProblems.filter(
-            (problem) => isCompleted(problem.id)
+          const solvedCount = patternProblems.filter((problem) =>
+            isCompleted(problem.id)
           ).length;
 
           return (
-            <article className="topic-card" key={topic.id}>
-              <h2>{topic.title}</h2>
-              <p>{topic.description}</p>
-
-              <p>
-                {solved} / {topicProblems.length} solved
-              </p>
-
+            <article
+              className="pattern-card"
+              key={`${pattern.topicId}/${pattern.id}`}
+            >
               <Link
-                className="topic-footer"
-                to={`/dsa/${topic.id}`}
+                to={`/dsa/${pattern.topicId}/${pattern.id}`}
+                className="pattern-card dsa-pattern-card"
+                key={`${pattern.topicId}/${pattern.id}`}
               >
-                Explore Patterns →
+                <h2>{pattern.title.replace(/^Pattern \d+:\s*/, "")}</h2>
+
+                <p className="pattern-count">
+                  {solvedCount} / {patternProblems.length} solved
+                </p>
+
+                <span className="pattern-link">View Questions →</span>
               </Link>
             </article>
           );

@@ -1,6 +1,7 @@
 
 import frontMatter from "front-matter";
 import { legacyProblems } from "./legacyProblems";
+import { questionCatalog } from "./questionCatalog";
 
 // Automatically import all Markdown files.
 const markdownFiles = import.meta.glob(
@@ -66,7 +67,8 @@ const markdownProblems = Object.entries(markdownFiles).map(
 
 export const problems = [
   ...legacyProblems,
-  ...markdownProblems
+  ...markdownProblems,
+  ...questionCatalog
 ];
 
 // Validate unique IDs and routes.
