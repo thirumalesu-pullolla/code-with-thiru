@@ -1,16 +1,36 @@
-# React + Vite
+# Code With Thiru
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+A React and Vite application for learning data structures and algorithms through pattern-based practice.
 
-Currently, two official plugins are available:
+## Requirements
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- Node.js 22.12 or later
+- npm
 
-## React Compiler
+## Run locally
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+```sh
+npm install
+npm run dev
+```
 
-## Expanding the Oxlint configuration
+Vite prints the local URL when the development server starts.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and Oxlint's TypeScript related rules in your project.
+## Validate and build
+
+```sh
+npm test
+npm run lint
+npm run build
+npm run preview
+```
+
+The production build is written to `dist/`. Deploy that directory with a static host. Because the app uses browser-side routing, configure the host to serve `index.html` for unknown paths so direct links and page refreshes continue to work.
+
+## Adding questions
+
+- Add a Markdown problem under `src/content/dsa/` with the required front matter fields: `id`, `title`, `topicId`, `patternId`, `difficulty`, and `description`.
+- Or add question metadata to `src/data/questionCatalog.js`. Put worked solutions in a pattern-specific `src/data/workedContent*.js` module, register the problem ID in `src/data/workedQuestionIds.js`, and add a lazy loader in `src/data/questionContent.js`. This keeps list pages lightweight and loads solution content only on a problem detail page. Prompt-only entries stay marked as drafts.
+- Topic and pattern IDs must match `src/data/dsa.js`. Catalog integrity is checked during app startup and by `npm test`.
+
+Completed-question progress is stored in the browser's local storage and is not synchronized between devices.

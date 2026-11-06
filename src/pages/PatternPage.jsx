@@ -1,5 +1,5 @@
-import { useMemo, useState } from "react";
-import { Link, useParams } from "react-router";
+import { useMemo } from "react";
+import { Link, useParams, useSearchParams } from "react-router";
 
 import { dsaTopics } from "../data/dsa";
 import { problems } from "../data/problems";
@@ -8,14 +8,18 @@ import ProblemFilters from "../components/problems/ProblemFilters";
 import ProblemList from "../components/problems/ProblemList";
 import ProgressBar from "../components/problems/ProgressBar";
 
-import { useProgress } from "../context/ProgressContext";
+import { useProgress } from "../context/useProgress";
 import NotFound from "./NotFound";
 
 function PatternPage() {
   const { topicId, patternId } = useParams();
+  const [searchParams, setSearchParams] = useSearchParams();
 
-  const [search, setSearch] = useState("");
-  const [difficulty, setDifficulty] = useState("All");
+  const search = searchParams.get("q") ?? "";
+  const requestedDifficulty = searchParams.get("difficulty");
+  const difficulty = ["Easy", "Medium", "Hard"].includes(requestedDifficulty)
+    ? requestedDifficulty
+    : "All";
 
   const { completedProblems } = useProgress();
 
@@ -54,6 +58,18 @@ function PatternPage() {
     completedProblems.includes(problem.id)
   ).length;
 
+  function updateFilter(name, value) {
+    const nextParams = new URLSearchParams(searchParams);
+
+    if (!value || value === "All") {
+      nextParams.delete(name);
+    } else {
+      nextParams.set(name, value);
+    }
+
+    setSearchParams(nextParams, { replace: true });
+  }
+
   if (!topic || !pattern) {
     return <NotFound />;
   }
@@ -66,23 +82,31 @@ function PatternPage() {
 
       <h1>{pattern.title}</h1>
 
-      <p className="page-description">
-        Search, practice, and track your coding progress.
-      </p>
+      {patternProblems.length === 0 ? (
+        <p className="empty-pattern-message" role="status">
+          Questions for this pattern are coming soon.
+        </p>
+      ) : (
+        <>
+          <p className="page-description">
+            Search, practice, and track your coding progress.
+          </p>
 
-      <ProgressBar
-        completed={solvedCount}
-        total={patternProblems.length}
-      />
+          <ProgressBar
+            completed={solvedCount}
+            total={patternProblems.length}
+          />
 
-      <ProblemFilters
-        search={search}
-        onSearchChange={setSearch}
-        difficulty={difficulty}
-        onDifficultyChange={setDifficulty}
-      />
+          <ProblemFilters
+            search={search}
+            onSearchChange={(value) => updateFilter("q", value)}
+            difficulty={difficulty}
+            onDifficultyChange={(value) => updateFilter("difficulty", value)}
+          />
 
-      <ProblemList problems={filteredProblems} />
+          <ProblemList problems={filteredProblems} />
+        </>
+      )}
     </section>
   );
 }

@@ -4,7 +4,7 @@ import { useSearchParams } from "react-router";
 import { dsaTopics } from "../data/dsa";
 import { problems } from "../data/problems";
 
-import { useProgress } from "../context/ProgressContext";
+import { useProgress } from "../context/useProgress";
 import useProblemFilters from "../hooks/useProblemFilters";
 
 import ExplorerFilters from "../components/problems/ExplorerFilters";

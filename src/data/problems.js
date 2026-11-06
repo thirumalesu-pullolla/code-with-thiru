@@ -1,7 +1,8 @@
-
-import frontMatter from "front-matter";
+import { parseMarkdownDocument } from "./parseMarkdownDocument.js";
 import { legacyProblems } from "./legacyProblems";
 import { questionCatalog } from "./questionCatalog";
+import { dsaTopics } from "./dsa";
+import { validateProblems } from "./validateProblems";
 
 // Automatically import all Markdown files.
 const markdownFiles = import.meta.glob(
@@ -13,14 +14,8 @@ const markdownFiles = import.meta.glob(
   }
 );
 
-const validDifficulties = new Set([
-  "Easy",
-  "Medium",
-  "Hard"
-]);
-
 function parseMarkdownProblem(filePath, rawContent) {
-  const { attributes, body } = frontMatter(rawContent);
+  const { attributes, body } = parseMarkdownDocument(rawContent);
 
   const requiredFields = [
     "id",
@@ -40,12 +35,6 @@ function parseMarkdownProblem(filePath, rawContent) {
         `Missing or invalid "${field}" in ${filePath}`
       );
     }
-  }
-
-  if (!validDifficulties.has(attributes.difficulty)) {
-    throw new Error(
-      `Invalid difficulty in ${filePath}`
-    );
   }
 
   return {
@@ -71,29 +60,4 @@ export const problems = [
   ...questionCatalog
 ];
 
-// Validate unique IDs and routes.
-const problemIds = new Set();
-const problemRoutes = new Set();
-
-for (const problem of problems) {
-  if (problemIds.has(problem.id)) {
-    throw new Error(
-      `Duplicate problem ID detected: ${problem.id}`
-    );
-  }
-
-  const route = [
-    problem.topicId,
-    problem.patternId,
-    problem.id
-  ].join("/");
-
-  if (problemRoutes.has(route)) {
-    throw new Error(
-      `Duplicate problem route detected: ${route}`
-    );
-  }
-
-  problemIds.add(problem.id);
-  problemRoutes.add(route);
-}
+validateProblems(problems, dsaTopics);

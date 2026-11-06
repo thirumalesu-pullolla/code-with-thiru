@@ -1,7 +1,7 @@
 
-function Footer() {
-  const currentYear = new Date().getFullYear();
+const currentYear = new Date().getFullYear();
 
+function Footer() {
   return (
     <footer className="footer">
       <p>

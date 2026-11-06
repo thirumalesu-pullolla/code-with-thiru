@@ -35,12 +35,16 @@ function DsaTopicPage() {
               <h2>{pattern.title}</h2>
               <p>{count} coding questions</p>
 
-              <Link
-                to={`/dsa/${topicId}/${pattern.id}`}
-                className="pattern-link"
-              >
-                View Questions →
-              </Link>
+              {count === 0 ? (
+                <span className="pattern-link">Coming soon</span>
+              ) : (
+                <Link
+                  to={`/dsa/${topicId}/${pattern.id}`}
+                  className="pattern-link"
+                >
+                  View Questions →
+                </Link>
+              )}
             </article>
           );
         })}

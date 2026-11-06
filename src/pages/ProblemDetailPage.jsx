@@ -1,8 +1,10 @@
 
+import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router";
 
 import { problems } from "../data/problems";
-import { useProgress } from "../context/ProgressContext";
+import { loadQuestionContent } from "../data/questionContent";
+import { useProgress } from "../context/useProgress";
 
 import ProblemHeader from "../components/problems/ProblemHeader";
 import ProblemExample from "../components/problems/ProblemExample";
@@ -22,6 +24,31 @@ function ProblemDetailPage() {
       item.topicId === topicId &&
       item.patternId === patternId
   );
+  const [loadedSolution, setLoadedSolution] = useState(null);
+  const [solutionError, setSolutionError] = useState(null);
+
+  useEffect(() => {
+    let active = true;
+
+    if (problem?.contentStatus === "complete" && !problem.content) {
+      loadQuestionContent(problem)
+        .then((content) => {
+          if (active) setLoadedSolution({ problemId: problem.id, content });
+        })
+        .catch((error) => {
+          if (active) setSolutionError({ problemId: problem.id, error });
+        });
+    }
+
+    return () => {
+      active = false;
+    };
+  }, [problem]);
+  const solutionContent =
+    problem?.content ??
+    (loadedSolution?.problemId === problem?.id ? loadedSolution.content : "");
+  const contentLoadError =
+    solutionError?.problemId === problem?.id ? solutionError.error : null;
 
   if (!problem) {
     return <NotFound />;
@@ -44,6 +71,13 @@ function ProblemDetailPage() {
         description={problem.description}
       />
 
+      {problem.contentStatus === "draft" && (
+        <p className="draft-content-notice" role="note">
+          Draft question: examples and a worked solution have not been
+          added yet.
+        </p>
+      )}
+
       <button
         type="button"
         className={
@@ -59,7 +93,15 @@ function ProblemDetailPage() {
       </button>
 
       {problem.contentType === "markdown" ? (
-        <MarkdownRenderer content={problem.content} />
+        contentLoadError ? (
+          <p role="alert">
+            Unable to load the worked solution: {contentLoadError.message}
+          </p>
+        ) : solutionContent ? (
+          <MarkdownRenderer content={solutionContent} />
+        ) : (
+          <p role="status">Loading worked solution...</p>
+        )
       ) : (
         <>
           <section className="problem-section">

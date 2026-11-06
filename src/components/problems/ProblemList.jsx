@@ -1,6 +1,6 @@
 
 import { Link } from "react-router";
-import { useProgress } from "../../context/ProgressContext";
+import { useProgress } from "../../context/useProgress";
 
 function ProblemList({ problems }) {
   const { isCompleted, toggleCompleted } = useProgress();
@@ -38,6 +38,19 @@ function ProblemList({ problems }) {
             className={`difficulty ${problem.difficulty.toLowerCase()}`}
           >
             {problem.difficulty}
+          </span>
+          <span
+            className={
+              problem.contentStatus === "complete" ||
+              problem.contentStatus === undefined
+                ? "content-status complete"
+                : "content-status draft"
+            }
+          >
+            {problem.contentStatus === "complete" ||
+            problem.contentStatus === undefined
+              ? "Solutions ready"
+              : "Solutions pending"}
           </span>
         </div>
       ))}

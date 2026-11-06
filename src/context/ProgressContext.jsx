@@ -1,29 +1,38 @@
 
 import {
-  createContext,
-  useContext,
+  useCallback,
   useMemo
 } from "react";
 
 import useLocalStorage from "../hooks/useLocalStorage";
-
-const ProgressContext = createContext(null);
+import ProgressContext from "./ProgressContextValue";
 
 export function ProgressProvider({ children }) {
   const [completedProblems, setCompletedProblems] =
-    useLocalStorage("cwt-completed-problems", []);
+    useLocalStorage(
+      "cwt-completed-problems",
+      [],
+      (value) =>
+        Array.isArray(value) &&
+        value.every(
+          (problemId) =>
+            typeof problemId === "string" &&
+            problemId.trim() !== ""
+        )
+    );
 
-  function isCompleted(problemId) {
-    return completedProblems.includes(problemId);
-  }
+  const isCompleted = useCallback(
+    (problemId) => completedProblems.includes(problemId),
+    [completedProblems]
+  );
 
-  function toggleCompleted(problemId) {
+  const toggleCompleted = useCallback((problemId) => {
     setCompletedProblems((previous) =>
       previous.includes(problemId)
         ? previous.filter((id) => id !== problemId)
         : [...previous, problemId]
     );
-  }
+  }, [setCompletedProblems]);
 
   const contextValue = useMemo(
     () => ({
@@ -31,7 +40,7 @@ export function ProgressProvider({ children }) {
       isCompleted,
       toggleCompleted
     }),
-    [completedProblems]
+    [completedProblems, isCompleted, toggleCompleted]
   );
 
   return (
@@ -39,16 +48,4 @@ export function ProgressProvider({ children }) {
       {children}
     </ProgressContext.Provider>
   );
-}
-
-export function useProgress() {
-  const context = useContext(ProgressContext);
-
-  if (!context) {
-    throw new Error(
-      "useProgress must be used inside ProgressProvider"
-    );
-  }
-
-  return context;
 }

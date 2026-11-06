@@ -413,6 +413,19 @@ a {
   background: #3d1b24;
 }
 
+.content-status {
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.content-status.complete {
+  color: #4adeb4;
+}
+
+.content-status.draft {
+  color: #a7b4c8;
+}
+
 .problem-section {
   margin: 38px 0;
 }
@@ -982,226 +995,27 @@ a {
 
 .dsa-pattern-grid {
   display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
-  gap: 18px;
-}
-
-.dsa-pattern-grid .pattern-card {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  min-width: 0;
-  min-height: 205px;
-  padding: 20px;
-  overflow: hidden;
-  background: linear-gradient(145deg, #162337, #101a2b);
-  border: 1px solid #253348;
-  border-radius: 16px;
-  transition: transform 180ms ease, border-color 180ms ease,
-    box-shadow 180ms ease;
-}
-
-.dsa-pattern-grid .pattern-card::before {
-  position: absolute;
-  top: 0;
-  left: 20px;
-  right: 20px;
-  height: 3px;
-  content: "";
-  background: #4adeb4;
-  border-radius: 0 0 4px 4px;
-  opacity: 0.65;
-}
-
-.dsa-pattern-grid .pattern-card:hover {
-  transform: translateY(-4px);
-  border-color: #4adeb4;
-  box-shadow: 0 12px 28px rgb(0 0 0 / 20%);
-}
-
-.dsa-pattern-grid .pattern-card h2 {
-  margin: 8px 0 16px;
-  font-size: 17px;
-  line-height: 1.45;
-}
-
-.dsa-pattern-grid .pattern-count {
-  margin: auto 0 4px;
-  color: #a7b4c8;
-  font-size: 13px;
-}
-
-.dsa-pattern-grid .pattern-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  width: fit-content;
-  margin-top: 12px;
-  color: #4adeb4;
-  font-size: 14px;
-  font-weight: 600;
-}
-
-.dsa-pattern-grid .pattern-link:hover {
-  color: #7af5d0;
-}
-
-.dsa-pattern-grid .pattern-link:focus-visible {
-  outline: 2px solid #4adeb4;
-  outline-offset: 4px;
-  border-radius: 3px;
-}
-
-.dsa-progress-compact {
-  display: flex;
-  justify-content: flex-end;
-  margin: -20px 0 24px;
-}
-
-.dsa-progress-compact .progress-card {
-  display: grid;
-  grid-template-columns: auto minmax(80px, 140px) auto;
-  align-items: center;
-  gap: 12px;
-  width: max-content;
-  max-width: 100%;
-  margin: 0;
-  padding: 10px 14px;
-}
-
-.dsa-progress-compact .progress-heading h3 {
-  font-size: 14px;
-}
-
-.dsa-progress-compact .progress-heading span,
-.dsa-progress-compact .progress-card p {
-  margin: 0;
-  font-size: 12px;
-}
-
-.dsa-progress-compact .progress-track {
-  width: 140px;
-  height: 7px;
-  margin: 0;
-}
-
-@media (max-width: 1100px) {
-  .dsa-pattern-grid {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-  }
-}
-
-@media (max-width: 850px) {
-  .dsa-pattern-grid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
-}
-
-@media (max-width: 600px) {
-  .dsa-pattern-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 12px;
-  }
-
-  .dsa-progress-compact {
-    justify-content: flex-start;
-    margin-top: 0;
-  }
-
-  .dsa-progress-compact .progress-card {
-    grid-template-columns: 1fr auto;
-  }
-
-  .dsa-progress-compact .progress-track {
-    grid-column: 1 / -1;
-    grid-row: 2;
-    width: 100%;
-  }
-}
-
-@media (max-width: 400px) {
-  .dsa-pattern-grid {
-    grid-template-columns: 1fr;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .dsa-pattern-grid .pattern-card {
-    transition: none;
-  }
-
-  .dsa-pattern-grid .pattern-card:hover {
-    transform: none;
-  }
-}
-
-.explorer-toolbar {
-  width: 100%;
-  margin: 28px 0;
-}
-
-.explorer-toolbar .explorer-filters {
-  width: 100%;
-  margin: 0;
-}
-
-@media (max-width: 800px) {
-  .explorer-toolbar {
-    grid-template-columns: 1fr;
-    gap: 16px;
-  }
-}
-
-.explorer-heading-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 20px;
-  margin-bottom: 16px;
-}
-
-.explorer-heading-row h1 {
-  margin: 0;
-}
-
-.explorer-heading-row .progress-card {
-  display: grid;
-  grid-template-columns: auto minmax(60px, 100px) auto;
-  align-items: center;
-  gap: 10px;
-  width: max-content;
-  max-width: 100%;
-  margin: 0;
-  padding: 8px 12px;
-}
-
-.explorer-heading-row .progress-heading h3 {
-  font-size: 13px;
-}
-
-.explorer-heading-row .progress-heading span,
-.explorer-heading-row .progress-card p {
-  margin: 0;
-  font-size: 12px;
-}
-
-.explorer-heading-row .progress-track {
-  width: 100px;
-  height: 6px;
-  margin: 0;
-}
-
-@media (max-width: 700px) {
-  .explorer-heading-row {
-    align-items: flex-start;
-    flex-direction: column;
-  }
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 14px;
 }
 
 .dsa-pattern-card {
-  color: inherit;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 150px;
+  padding: 18px;
+  color: #e9eef5;
   text-decoration: none;
-  cursor: pointer;
+  background: #121c2e;
+  border: 1px solid #253348;
+  border-radius: 12px;
+  transition: border-color 160ms ease, background-color 160ms ease;
+}
+
+.dsa-pattern-card:hover {
+  background: #172337;
+  border-color: #4adeb4;
 }
 
 .dsa-pattern-card:focus-visible {
@@ -1209,5 +1023,93 @@ a {
   outline-offset: 3px;
 }
 
+.dsa-pattern-card .dsa-pattern-topic {
+  align-self: flex-start;
+  margin-bottom: 12px;
+  padding: 4px 8px;
+  color: #cbd5e1;
+  background: #1b293d;
+  border: 1px solid #34445a;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 600;
+}
 
+.dsa-pattern-card h2 {
+  margin: 0 0 12px;
+  color: #e9eef5;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.45;
+}
+
+.dsa-pattern-card .pattern-count {
+  margin: auto 0 0;
+  color: #a7b4c8;
+  font-size: 12px;
+}
+
+.dsa-pattern-card .pattern-link {
+  margin-top: 10px;
+  color: #4adeb4;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.dsa-progress-compact .progress-card {
+  padding: 14px 18px;
+}
+
+@media (max-width: 600px) {
+  .dsa-pattern-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  .dsa-pattern-card {
+    min-height: 140px;
+    padding: 14px;
+  }
+}
+
+@media (max-width: 380px) {
+  .dsa-pattern-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dsa-pattern-card {
+    transition: none;
+  }
+}
+
+.dsa-pattern-card-disabled {
+  cursor: default;
+}
+
+.dsa-pattern-card-disabled:hover {
+  background: #121c2e;
+  border-color: #253348;
+}
+
+.empty-pattern-message,
+.draft-content-notice,
+.route-loading {
+  padding: 14px 16px;
+  color: #cbd5e1;
+  background: #121c2e;
+  border: 1px solid #253348;
+  border-radius: 10px;
+}
+
+.draft-content-notice {
+  margin: 20px 0;
+  border-left: 3px solid #d6a64f;
+}
+
+.route-loading {
+  margin: 24px auto;
+  max-width: 1200px;
+}
 
