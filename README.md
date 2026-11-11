@@ -16,6 +16,12 @@ npm run dev
 
 Vite prints the local URL when the development server starts.
 
+## Connect to the backend
+
+Start the Spring Boot backend separately on port `8080` (from its project folder, run `.\mvnw.cmd spring-boot:run`). The Vite development server forwards `/api` requests to `http://localhost:8080`, so the frontend can use the proxy by default. Keep browser credentials enabled for auth requests; the app already does this and fetches a CSRF token before each `POST`.
+
+If you set `VITE_API_URL`, put the `.env.local` file in the project root (next to `package.json`), not in `src`. Leave it blank to use the Vite proxy, or set it to the backend origin when connecting directly. Direct browser-to-backend requests require the backend to allow the frontend's origin and credentials.
+
 ## Validate and build
 
 ```sh

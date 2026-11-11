@@ -1,4 +1,3 @@
-
 import { lazy, Suspense } from "react";
 import { Routes, Route } from "react-router";
 
@@ -18,6 +17,7 @@ const TechnologyPage = lazy(
   () => import("./pages/TechnologyPage")
 );
 const NotFound = lazy(() => import("./pages/NotFound"));
+const AuthPage = lazy(() => import("./pages/AuthPage"));
 
 function App() {
   return (
@@ -58,6 +58,8 @@ function App() {
             path=":technology"
             element={<TechnologyPage />}
           />
+
+          <Route path="login" element={<AuthPage />} />
 
           <Route path="*" element={<NotFound />} />
         </Route>
